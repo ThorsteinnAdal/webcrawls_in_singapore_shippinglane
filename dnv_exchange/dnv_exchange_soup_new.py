@@ -174,7 +174,7 @@ def main(requested_runs=40, wishlist_filename='./dnv_exchange_gets/dnv_ids_to_ge
     :param requested_runs: how many records should be processed from the 'wishlist'. The default value is 40 (semi-fast)
     :param wishlist_filename: exact filename for the wishlist file. default value is './dnv_exchange_gets/dnv_ids_to_get.txt'
     :param kwargs: setup for optional outputs:
-        {db_output: the filename of the output file. Default value is './dnv_exchange_gets/dnv_db_get_n.txt'
+        {db_output: the filename of the output file. Default value is './dnv_exchange_gets/dnv_db_get_11.txt'
          ids_completed: The filename where the list of ids that are completed is stored. The default is './dnv_exchange_gets/dnv_ids_obtained.txt'
          log_file: The log. The default is './dnv_exchange_gets/dnv_db_get_n_log.txt'
     :return:
@@ -190,7 +190,7 @@ def main(requested_runs=40, wishlist_filename='./dnv_exchange_gets/dnv_ids_to_ge
     here = os.path.abspath(os.path.dirname(__file__))
     print here
 
-    db_output_filename = kwargs.pop('db_output_filename', './dnv_exchange_gets/dnv_db_get_n.txt')
+    db_output_filename = kwargs.pop('db_output_filename', './dnv_exchange_gets/dnv_db_get_11.txt')
     ids_completed_filename = kwargs.pop('ids_completed_filename', './dnv_exchange_gets/dnv_ids_obtained.txt')
     log_filename = kwargs.pop('log_filename', './dnv_exchange_gets/dnv_db_get_n_log.txt')
 
@@ -258,25 +258,27 @@ def main(requested_runs=40, wishlist_filename='./dnv_exchange_gets/dnv_ids_to_ge
               " Unprocessed items are in file: %s." % (len(part_list), number_of_requests, log_filename)
 
 
-main(requested_runs=800,
+main(requested_runs=400,
      wishlist_filename='./dnv_exchange_gets/dnv_ids_to_get.txt',
      ids_completed_filename='./dnv_exchange_gets/dnv_ids_obtained.txt',
-     log_filename='./dnv_exchange_gets/dnv_db_get_9_log.txt',
-     db_output_filename='./dnv_exchange_gets/dnv_db_get_9.txt')
+     log_filename='./dnv_exchange_gets/dnv_db_get_10_log.txt',
+     db_output_filename='./dnv_exchange_gets/dnv_db_get_10.txt')
 
 
 def dnv_unify_get_documents():
     from db_to_file_helpers.jsonDicts_to_file import file_to_db, db_to_file
     my_root = './dnv_exchange_gets/'
-    file_list = [my_root + 'dnv_db_get_1_fixed.txt',
+    file_list = [my_root + 'dnv_db_get_1.txt',
                 my_root + 'dnv_db_get_2.txt',
                 my_root + 'dnv_db_get_3.txt',
                 my_root + 'dnv_db_get_4.txt',
-                my_root + 'dnv_db_get_n.txt',
+                my_root + 'dnv_db_get_11.txt',
                 my_root + 'dnv_db_get_6.txt',
                 my_root + 'dnv_db_get_5.txt',
                 my_root + 'dnv_db_get_7.txt',
-                my_root + 'dnv_db_get_8.txt']
+                my_root + 'dnv_db_get_8.txt',
+                my_root + 'dnv_db_get_9.txt',
+                my_root + 'dnv_db_get_10.txt']
     db = {}
     for one_file in file_list:
         print one_file
