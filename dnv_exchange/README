@@ -1,0 +1,25 @@
+DNV file logics
+
+dnv_registry_soup:
+a file containing short stubs used to collect information from DNV exchange listing of all available ships.
+The job created several "dictionary" files in the dnv_output_files directory
+The file also contains a method for unifying the dictionary files and generating a csv file
+
+dnv_exchange_soup:
+a bs4 script file for collecting information from dnv exchange for a given imo number.
+the script was executed through dnv_commit_the_robbery.
+The script generates many oddball field names and dimension conversions, which were then corrected
+using the reformat_dnv_file script.
+
+later versions should handle dnv_id values and generate more standard field names
+
+recover_old_dnvFiles:
+a script for collecting old db files from the "input_files" directory. These files were collected in the first
+attack on the dnv site. Some of the output files from this script is collected in the output_files in the parent folder
+
+dnv_db_to_csv:
+a script for prying apart the db collected in the dnv_exchange_soup script.
+The script has a method for making a csv output for the machinery_l table
+The script has a method for cleaning up the dnv_db (removing the machinery_l table and re-naming the type string)
+the outputs are collected in dnv_to_csv_output
+

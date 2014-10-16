@@ -1,0 +1,9 @@
+About ABS files:
+
+abs_library_from_catalogue:
+the ABS_catalogue file is a csv file that I copied from the abs website. The catalogue has all the publicly available ships and their abs_id
+abs_library_from_catalogue, is a a script to convert the file to my-stype dictionary format.
+I then collected all available ids into a single file as a list (abs_ids.txt)
+
+abs_soup:
+a script file for going onto the main abs_website to fetch the data for each ship id given.
