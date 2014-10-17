@@ -50,3 +50,23 @@ def groom_file_db(old_file, new_file):
     db = file_to_db(old_file)
     db_to_file(db, new_file)
 
+
+def dump_db_to_csv(db, output_file):
+    import unicodecsv
+    from db_format_helpers.ship_fields import get_all_ship_fields
+
+    all_fields = get_all_ship_fields(db)
+    all_rows = db.keys()
+    with open(output_file, 'w') as f:
+        csv_output = unicodecsv.DictWriter(f, all_fields, encoding='utf-8')
+        csv_output.writeheader()
+        try:
+            for row in all_rows:
+                to_write = db[row]
+                csv_output.writerow(to_write)
+            return True
+        except Exception, me:
+            print me.message
+            return False
+
+

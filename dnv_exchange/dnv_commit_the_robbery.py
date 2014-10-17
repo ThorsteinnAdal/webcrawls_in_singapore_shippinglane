@@ -1,6 +1,6 @@
 __author__ = 'thorsteinn'
 
-from dnv_exchange.dnv_exchange_soup import buildMasterTable
+from dnv_exchange.dnv_exchange_soup_imo import buildMasterTable
 import json
 from db_to_file_helpers.jsonDicts_to_file import append_db_to_file
 
