@@ -24,7 +24,7 @@ Soup module that grabs information from MarineConnection
     title = soup.text.strip().split()
     if str(imoNumber) not in title:
         print 'ship not found'
-        return {'IMO number': imoNumber, 'Name of ship':None}
+        return {'imo_id': imoNumber, 'name_s':None}
 
     # passed title find the rows in the data table
     t = soup.find_all('table', attrs = {'class':'ship-data-table'})
@@ -80,7 +80,7 @@ def dump_findings_to_json(nameOfOutput,start,stop):
             f.writelines('\n')
             ii+=1
             time.sleep(0)
-dump_findings_to_json('json', 4505, 4620)
+# dump_findings_to_json('json', 4505, 4620)
 
 def build_database(list_of_imo_numbers):
     print 'Building database from imoNumbers'

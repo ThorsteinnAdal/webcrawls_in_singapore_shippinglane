@@ -3,6 +3,13 @@ __author__ = 'thorsteinn'
 import urllib2
 from bs4 import BeautifulSoup
 
+def setup_items_to_find(sub_view):
+    return_db = {}
+    if sub_view == 'record_vesseldetailsprinparticular':
+        return_db['Designation'] = {'table_type': 'two_column_table',  }
+    'Designation', 'Categories', 'Anchor Equipment', 'Other Info', 'Principal Characteristics'
+
+
 def abs_soup(abs_id='09180808', sub_view='record_vesseldetailsprinparticular'):
 
     print 'Getting %s from abs for abs_id: %s' % (sub_view, abs_id)
@@ -12,6 +19,7 @@ def abs_soup(abs_id='09180808', sub_view='record_vesseldetailsprinparticular'):
 
     # define the proper web address
     url = 'https://www.eagle.org/safenet/record/%s?Classno=%s&Accesstype=PUBLIC' % (sub_view, abs_id)
+    # example
 
     # set up the return library:
     db = {'abs_id': abs_id}
@@ -21,9 +29,11 @@ def abs_soup(abs_id='09180808', sub_view='record_vesseldetailsprinparticular'):
         page = opener.open(url)
         soup = BeautifulSoup(page.read())
     except Exception, mess:
+        db['name_s'] = None
         db['pageMessage'] = mess.message
         return db
 
+    # check if a valid page was found. This could be handled with httpException in the urllib2
     validPage = soup.find_all('title')
     if validPage[0].text == 'ABS Record':
         print "A valid ship was found"
@@ -33,7 +43,7 @@ def abs_soup(abs_id='09180808', sub_view='record_vesseldetailsprinparticular'):
         db['pageMessage'] = validPage[0]
         return db
 
-    # header table
+    # header table -- contains the ship name
     header_table = soup.find_all('table', attrs={'class': 'innertable'})
     header_rows = header_table[2].find_all('tr')
     header_fields = header_rows[0].find_all('td')
@@ -41,35 +51,35 @@ def abs_soup(abs_id='09180808', sub_view='record_vesseldetailsprinparticular'):
 
     # get the information from the header table
     for item in range(len(header_fields)):
-        field = header_fields[item].contents[0]
-        value = header_values[item].contents[0]
+        field = header_fields[item].contents[0].strip()  # contains all the field names in the header
+        value = header_values[item]  # contains all the value items in the header
         if field:
-            db[field] = value
+            db[field] = value.contents[0].strip()
         else:
             break
 
     data_tables = soup.find_all('table', attrs={'class':'tableforms'})
     # the first data table is the holder.
     # specific to summary page:
+
     single_column_tables = ['ABS Class Notations', 'Functions',
                         'International code for the security of the ships and of port facilities (ISPS Code), ABS Security Notation']
-    two_column_tables = ['Designation', 'Categories', 'Anchor Equipment', 'Other Info', 'Principal Characteristics',]
+    two_column_tables = ['Designation', 'Categories', 'Anchor Equipment', 'Other Info', 'Principal Characteristics']
 
     for i in range(len(data_tables)):
         data_table = data_tables[i]
         table_title = data_table.contents[1].text.strip()
-        print 'found: %s' % table_title
 
         if table_title in two_column_tables:
             titles = data_table.find_all('td', attrs={'class': 'row2bold', 'width': '50%'})
             values = data_table.find_all('td', attrs={'class': 'row1', 'width': '40%'})
             for index in range(len(titles)):
-                title = titles[index].contents[0]
-                value = values[index].contents[0]
+                title = titles[index].contents[0].strip()
+                value = values[index]
                 if len(value) == 0:
                     db[title] = None
                 else:
-                    db[title] = value
+                    db[title] = value.contents[0].strip()
 
         elif table_title in single_column_tables:
             print table_title

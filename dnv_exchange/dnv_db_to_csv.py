@@ -1,9 +1,6 @@
 __author__ = 'thorsteinn'
 
 from db_to_file_helpers.jsonDicts_to_file import file_to_db
-from db_format_helpers.ship_fields import get_all_ship_fields
-import unicodecsv
-import reformat_dnv_file
 
 
 def parse_component_name(s):
@@ -102,12 +99,12 @@ def dnv_db_extract_engine_db(db, **kwargs):
         ship_db = db[ship]
         if table_key in ship_db.keys():
             ship_engine_table = ship_db[table_key]
-            if 'imo_id' in ship_db.keys():
-                id_name = 'imo_id'
-                ship_id = ship_db['imo_id']
-            else:
+            if 'dnv_id' in ship_db.keys():
                 id_name = 'dnv_id'
                 ship_id = ship_db['dnv_id']
+            else:
+                id_name = 'imo_id'
+                ship_id = ship_db['imo_id']
 
             counter = 0
             for line in ship_engine_table:
@@ -147,7 +144,7 @@ def dnv_db_to_csv(db, **kwargs):
     from db_to_file_helpers.jsonDicts_to_file import dump_db_to_csv
 
     output_file = kwargs.pop('output_file', 'dnv_db.csv')
-    dnv_type_s = kwargs.pop('dnv_type_s', 'dnv_type_s')
+    dnv_type_s = kwargs.pop('dnv_type_s', 'dnv_type_text')
     del_list = kwargs.pop('del_list', ['machinery_l'])
     if type(del_list) is not list:
         del_list = [del_list]
@@ -180,10 +177,17 @@ def main(db_input_file, ship_db_output_csv, engine_db_output_csv):
         db = file_to_db(db_input_file)
         dnv_db_extract_engine_db(db, output_file=engine_db_output_csv, machinery_table_key='machinery_l')
 
+    if dnv_class_output_csv:
+        db = file_to_db(db_input_file)
+        dnv_db_extract_class_db(db,
+                                output_file=dnv_class_output_csv,
+                                dnv_class_key='dnv_class_text',
+                                dnv_type_text_key='dnv_type_text')
+
     if ship_db_output_csv:
         db = file_to_db(db_input_file)
-        dnv_db_to_csv(db, output_file=ship_db_output_csv, dnv_type_s='dnv_type_s', del_list=['machinery_l'])
+        dnv_db_to_csv(db, output_file=ship_db_output_csv, dnv_type_s='dnv_type_text', del_list=['machinery_l'])
 
 
 if __name__ == '__main__':
-    main('./dnv_exchange_gets/dnv_db_fixed.txt', 'dnv_db.csv', 'dnv_engines.csv')
+    main('./dnv_exchange_get2/dnv_db_master_fix.txt', 'dnv_db.csv', 'dnv_engines.csv')

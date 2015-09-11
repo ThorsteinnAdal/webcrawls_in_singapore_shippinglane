@@ -1,7 +1,5 @@
 __author__ = 'thorsteinn'
 
-from db_format_helpers import get_all_ship_fields
-
 def get_all_ship_fields(db):
     ships = db.keys()
     fields = []
